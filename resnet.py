@@ -136,16 +136,12 @@ class ResidualBlock(nn.Module):
     def forward(self, x):
         identity = x
         
-        # 첫 번째 블록 ---
         out = self.conv1(x)
         out = self.bn1(out)
         out = self.relu(out)
-        # --- --- --- --- 
         
-        # 두 번째 블록 ---
         out = self.conv2(out)
         out = self.bn2(out)
-        # --- --- --- --- 
         
         # x(입력)과 out(출력)의 차원을 맞추기 위해 x의 차원을 조정
         if self.downsample is not None:
@@ -240,7 +236,7 @@ def define_model() -> nn.Module:
             return out
     
     # ResNet-18과 유사한 구성 (여기서는 간단히 각 레이어에 2개의 블록을 사용)
-    model = ResNet(ResidualBlock, [2, 2], num_classes=10) # 모델 인스턴스화
+    model = ResNet(ResidualBlock, [5, 5, 5], num_classes=10) # 모델 인스턴스화
     print(model)
     return model
 
