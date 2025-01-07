@@ -76,7 +76,7 @@ pip install -r requirements.txt
 ### Repository Clone
 
 ```bash
-git clone https://github.com/yourusername/resnet-cifar10.git
+git clone https://github.com/MachuEngine/ResNet-PyTorch.git
 ```
 
 ## 📈 Result
