@@ -48,8 +48,8 @@
 3. **Skip Connection**: 입력을 두 번째 Convolutional Layer의 출력에 더함
 4. **최종 ReLU 활성화 함수**: 결합된 출력에 `ReLU` 활성화 적용
 
-![ResNet Architecture](https://i.imgur.com/3cU8gfk.png)
-*Residual Block의 예시*
+![alt text](./outputs/residual.png)
+*Residual Block*
 
 ## 🔍 Install
 
@@ -107,7 +107,7 @@ git clone https://github.com/yourusername/resnet-cifar10.git
 | 20    | 0.3969     | 86.34%         | 0.4911          | 83.92%              |
 
 
-![alt text](image.png)
+![alt text](./outputs/image.png)
 *Training VS Validation*
 
 ### Accuracy and Loss Trends
@@ -125,3 +125,81 @@ git clone https://github.com/yourusername/resnet-cifar10.git
 **하이퍼파라미터 최적화**:	학습률, 배치 크기, 에포크 수 등을 추가로 조정하여 성능 향상 가능
 **데이터 증강(Data Augmentation)**:	데이터 증강 기법 도입으로 모델의 일반화 강화
 **더 깊은 모델 탐색**:	현재보다 더 깊거나 복잡한 모델을 실험하여 성능 향상 도모
+
+---
+
+## ResNet-18
+
+|         구성 요소	          | 레이어 수 |
+|----------------------------|----------|
+|초기 Convolutional Layer     |     1    |
+|Residual Layers (총 4개)     |     16   |
+|Fully Connected Layer        |     1    |
+|총 레이어 수                  |     18   |
+
+## 표준 ResNet 아키텍처 참고
+다양한 `ResNet` 버전의 레이어 구성
+
+|ResNet 버전	|레이어1	|레이어2	|레이어3	|레이어4	|총 Residual Block 수|
+|------------|---------|---------|--------|---------|-------------------|
+|ResNet-18	|     2	|     2	|         2	|     2	|             8         |
+|ResNet-34	|     3	|     4	|         6	|     3	|             16        |
+|ResNet-50	|     3	|     4	|         6	|     3	|             16        |
+|ResNet-101	|     3 |     4	|       23	|     3	|             33        |
+|ResNet-152	|     3	|     8	|       36	|     3	|             50        |
+
+참고: ResNet-50 이상은 Bottleneck Block을 사용하여 Residual Block 내에 더 많은 Convolutional Layer를 포함
+
+## Deep Residual Learning for Image Recognition 내용 정리
+*저자: Kaiming He, Xiangyu Zhang, Shaoqing Ren, Jian Sun (Microsoft Research)*
+*출판: CVPR 2016*
+**ResNet은 딥러닝의 "깊은 신경망 학습 불가능" 문제를 해결한 대표적인 연구로, 현대 AI 모델에서도 여전히 필수적인 개념**
+
+1. 연구 배경
+- 딥러닝에서 네트워크의 깊이를 증가시키면 일반적으로 성능이 향상됨.
+- 하지만, Vanishing Gradient (기울기 소실) & Degradation Problem (성능 저하) 으로 인해 매우 깊은 네트워크는 학습이 제대로 되지 않음.
+- 기존의 VGG 같은 CNN 모델들은 16~30층 수준이 한계였음
+
+
+2. 핵심 아이디어: Residual Learning (잔차 학습)
+🔹 기존 딥러닝의 문제점
+- 기존깊은 네트워크는 얕은 네트워크보다 학습이 잘 되지 않는 Degradation Problem 발생.
+    -> 단순히 층을 추가하면 성능이 오히려 나빠지는 현상
+
+🔹 해결 방법: Residual Learning Framework
+- 네트워크가 직접 함수 H(x) 를 학습하는 대신, 잔차(Residual) 함수 F(x)=H(x)−x 를 학습하도록 유도.
+- 이를 통해 기존 입력값 x 에 작은 변화(Residual)만 더하면 되므로 최적화가 쉬워짐.
+
+✅ 수식 표현:  y=F(x)+x
+
+여기서, F(x) 는 학습해야 할 잔차 함수, x 는 입력값.
+즉, 모델이 직접 H(x) 를 찾는 대신, F(x) 만 찾고 기존 입력 x 에 더하는 방식.
+
+3. ResNet 구조
+Shortcut Connection (지름길 연결, Skip Connection) 을 도입하여 이전 층의 출력을 직접 다음 층으로 전달.
+이러한 구조는 추가적인 학습 파라미터 없이 정보 흐름을 원활하게 유지함.
+각 블록은 기본적으로 두 개의 3×3 Conv 레이어로 구성됨.
+50층 이상에서는 Bottleneck 구조 (1×1, 3×3, 1×1 Conv 사용) 를 도입하여 연산량을 최적화.
+
+4. 실험 결과
+🔹 ImageNet 데이터셋 (ILSVRC 2015)
+
+152-layer ResNet: VGG-16보다 훨씬 깊지만, 연산량은 오히려 적고 성능은 뛰어남.
+Ensemble 모델이 Top-5 오류율 3.57% 로 대회 1위 기록! 🚀
+🔹 CIFAR-10 실험
+
+20층, 32층, 44층, 56층, 110층 비교 → 깊을수록 성능 향상 (단, 1202층은 오버피팅).
+기존 Highway Network(7.54%)보다 110-layer ResNet이 더 낮은 오류율 (6.43%) 기록.
+🔹 Object Detection (PASCAL VOC, MS COCO)
+
+Faster R-CNN 백본을 ResNet으로 바꿨더니 성능이 크게 향상됨 (COCO 기준 28% 개선).
+
+5. 결론
+ResNet은 잔차 학습(Residual Learning) 을 활용해 딥러닝 네트워크를 매우 깊게 만들면서도 학습이 가능하게 만든 혁신적인 모델.
+기존 CNN보다 훨씬 깊은 네트워크에서도 성능이 향상됨.
+ResNet 이후, Transformer, Diffusion Models 등 다양한 딥러닝 모델에서 Residual Connection이 필수 개념으로 자리 잡음.
+
+6. 논문의 기여 & 영향
+✅ 잔차 학습(Residual Learning) 도입 → 딥러닝 모델의 깊이 한계를 극복
+✅ 152층 이상의 초딥 신경망 학습 가능 → ImageNet 대회 우승 (2015)
+✅ 이후 Transformer, ViT, Diffusion, AlphaFold 등 다양한 분야에서 Residual Connection 필수 요소로 활용
