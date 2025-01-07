@@ -197,6 +197,6 @@ Faster R-CNN 백본을 ResNet으로 바꿨더니 성능이 크게 향상됨 (COC
 - ResNet 이후, Transformer, Diffusion Models 등 다양한 딥러닝 모델에서 Residual Connection이 필수 개념으로 자리 잡음.
 
 6. 논문의 기여 & 영향
-✅ 잔차 학습(Residual Learning) 도입 → 딥러닝 모델의 깊이 한계를 극복 
-✅ 152층 이상의 초딥 신경망 학습 가능 → ImageNet 대회 우승 (2015) 
-✅ 이후 Transformer, ViT, Diffusion, AlphaFold 등 다양한 분야에서 Residual Connection 필수 요소로 활용 
+✅ 잔차 학습(Residual Learning) 도입 → 딥러닝 모델의 깊이 한계를 극복   
+✅ 152층 이상의 초딥 신경망 학습 가능 → ImageNet 대회 우승 (2015)   
+✅ 이후 Transformer, ViT, Diffusion, AlphaFold 등 다양한 분야에서 Residual Connection 필수 요소로 활용   
